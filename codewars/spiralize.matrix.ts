@@ -1,10 +1,13 @@
 const spiralize = (size: number): number[][] => {
+    enum Direction { Right, Down, Left, Up }
+                                    
+    
     if (size < 5){
         console.error("size must be greater than 4")
         return []
     } 
     
-    let dir = "→";
+    let dir = Direction.Right;
 
     const matrix = Array(size).fill(0).map(() => Array(size).fill(0));
 
@@ -19,24 +22,24 @@ const spiralize = (size: number): number[][] => {
     const processNextCell = (y: number, x: number) => {
         matrix[y][x] = 1;
 
-        if (dir === "→" && (x + 1 === size || (matrix[y][x + 1] === 0 && matrix[y][x + 2] === 1))) {
-            dir = "↓"
+        if (dir === Direction.Right && (x + 1 === size || (matrix[y][x + 1] === 0 && matrix[y][x + 2] === 1))) {
+            dir = Direction.Down
         }
-        else if (dir === "↓" && (y + 1 === size || (matrix[y + 1][x] === 0 && matrix[y + 2] && matrix[y + 2][x] === 1))) {
-            dir = "←"
+        else if (dir === Direction.Down && (y + 1 === size || (matrix[y + 1][x] === 0 && matrix[y + 2] && matrix[y + 2][x] === 1))) {
+            dir = Direction.Left
         }
-        else if (dir === "←" && (x === 0 || (matrix[y][x - 1] === 0 && matrix[y][x - 2] === 1))) {
-            dir = "↑"
+        else if (dir === Direction.Left && (x === 0 || (matrix[y][x - 1] === 0 && matrix[y][x - 2] === 1))) {
+            dir = Direction.Up
         }
-        else if (dir === "↑" && (y === 0 || (matrix[y - 1][x] === 0 && matrix[y - 2] && matrix[y - 2][x] === 1))) {
-            dir = "→"
+        else if (dir === Direction.Up && (y === 0 || (matrix[y - 1][x] === 0 && matrix[y - 2] && matrix[y - 2][x] === 1))) {
+            dir = Direction.Right
         }
 
 
-        if (dir === "→") x++
-        if (dir === "←") x--
-        if (dir === "↓") y++
-        if (dir === "↑") y--
+        if (dir === Direction.Right) x++
+        if (dir === Direction.Left) x--
+        if (dir === Direction.Down) y++
+        if (dir === Direction.Up) y--
 
         countNeighbors(y,x)<3 && processNextCell(y, x)
 
